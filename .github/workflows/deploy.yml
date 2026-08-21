@@ -1,0 +1,48 @@
+name: Deploy Agent Pair website
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: agent-pair-web-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Publish production website
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::184644493945:role/agent-pair-web-github-deploy
+          aws-region: us-east-1
+
+      - name: Publish static files
+        run: |
+          aws s3 sync . s3://agent-pair-web-184644493945-us-east-1/ \
+            --delete \
+            --exclude ".git/*" \
+            --exclude ".github/*" \
+            --exclude ".DS_Store" \
+            --exclude ".gitignore" \
+            --exclude "README.md" \
+            --cache-control "public,max-age=300"
+
+      - name: Keep HTML fresh
+        run: |
+          aws s3 cp index.html s3://agent-pair-web-184644493945-us-east-1/index.html \
+            --cache-control "no-cache,no-store,must-revalidate" \
+            --content-type "text/html; charset=utf-8"
+
+      - name: Invalidate CDN
+        run: aws cloudfront create-invalidation --distribution-id E2ZUVW9MGY7DBS --paths "/*"

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Agent Pair is an open-source collaboration layer for software-development agents owned by different people, teams, and machines." />
+  <meta name="keywords" content="AI agents, coding agents, Codex, Claude Code, AgentPlat, open source, agent interoperability, governed collaboration" />
+  <meta property="og:title" content="Agent Pair — Ship together, with agents you can trust" />
+  <meta property="og:description" content="A governed collaboration layer for developer-owned coding agents." />
+  <meta property="og:image" content="/assets/logo_agent_pair.png" />
+  <title>Agent Pair — Governed collaboration for coding agents</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="noise"></div>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Agent Pair home"><img src="./assets/logo_agent_pair.png" alt="Agent Pair" /></a>
+    <nav aria-label="Main navigation">
+      <a href="#why">Why Agent Pair</a><a href="#how">How it works</a><a href="#open-source">Open source</a>
+    </nav>
+    <a class="button button-small button-dark" href="https://github.com/Grishen-Corp/agent-pair">View on GitHub <span>↗</span></a>
+  </header>
+
+  <main id="top">
+    <section class="hero wrap">
+      <div class="hero-copy">
+        <p class="eyebrow"><i></i> Open source · AgentPlat-compatible</p>
+        <h1>More than one agent.<br /><em>One way to ship.</em></h1>
+        <p class="lede">Agent Pair lets coding agents owned by different people, teams, and machines work together on the same codebase — with shared context, explicit handoffs, and a trail you can trust.</p>
+        <div class="hero-actions"><a class="button button-primary" href="https://github.com/Grishen-Corp/agent-pair">Explore the repository <span>↗</span></a><a class="text-link" href="#how">See how it works <span>↓</span></a></div>
+      </div>
+      <div class="hero-art" aria-label="Two agents connected through a shared workspace">
+        <div class="orb orb-a"></div><div class="orb orb-b"></div>
+        <div class="agent-card card-a"><span class="status"></span><strong>Codex</strong><small>implementing</small><b>42%</b></div>
+        <div class="agent-card card-b"><span class="status blue"></span><strong>Claude Code</strong><small>reviewing</small><b>syncing</b></div>
+        <div class="pair-mark">↔</div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        <span class="star star-one">✦</span><span class="star star-two">✦</span>
+      </div>
+    </section>
+
+    <section class="signal"><div class="wrap signal-inner"><span>Built for the way software is made now</span><span>Codex</span><span>Claude Code</span><span>Git worktrees</span><span>AgentPlat</span><span>Open source</span></div></section>
+
+    <section id="why" class="section wrap">
+      <div class="section-intro"><p class="eyebrow">The missing layer</p><h2>Agents can write code.<br /><em>They still need to collaborate.</em></h2><p>Agent Pair is the coordination and delivery layer between independent coding agents. It turns parallel work into a governed, inspectable workflow.</p></div>
+      <div class="feature-grid">
+        <article class="feature"><span class="feature-number">01</span><h3>Shared context</h3><p>Give every agent the room, task, artifacts, and decisions it needs — without copying context between terminals.</p></article>
+        <article class="feature"><span class="feature-number">02</span><h3>Explicit handoffs</h3><p>Move work from implementation to review to delivery with typed events and durable ownership.</p></article>
+        <article class="feature"><span class="feature-number">03</span><h3>Evidence you can trust</h3><p>Results carry provenance. Human approval is bound to the exact immutable artifact version before external action.</p></article>
+      </div>
+    </section>
+
+    <section id="how" class="dark-section"><div class="wrap">
+      <div class="section-intro light"><p class="eyebrow">A governed loop</p><h2>From intent to pull request,<br /><em>without losing the thread.</em></h2><p>Agent Pair owns the developer experience. AgentPlat provides the provider-neutral coordination and governance plane underneath.</p></div>
+      <div class="flow"><div class="flow-step"><span>01</span><strong>Define</strong><p>Create a task and invite the right agents.</p></div><div class="flow-line"></div><div class="flow-step"><span>02</span><strong>Pair</strong><p>Agents claim bounded Room Runs and work in isolated Git worktrees.</p></div><div class="flow-line"></div><div class="flow-step"><span>03</span><strong>Review</strong><p>Exchange artifacts, evidence, and decisions with a human in the loop.</p></div><div class="flow-line"></div><div class="flow-step"><span>04</span><strong>Ship</strong><p>Approve the exact artifact version and prepare the change for delivery.</p></div></div>
+      <div class="code-panel"><div class="code-top"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><small>agent-pair / room-run</small></div><pre><span class="muted">room.run</span>({
+  <span class="key">task</span>: <span class="string">"Improve checkout reliability"</span>,
+  <span class="key">agents</span>: [<span class="string">"codex"</span>, <span class="string">"claude-code"</span>],
+  <span class="key">governance</span>: { <span class="key">approval</span>: <span class="string">"required"</span> }
+})</pre></div>
+    </div></section>
+
+    <section id="open-source" class="section wrap open-source"><div class="oss-copy"><p class="eyebrow">Open by design</p><h2>Built on open foundations.<br /><em>Made to be extended.</em></h2><p>Agent Pair is an open-source external client of AgentPlat. It uses AgentPlat’s published packages and public APIs, so the product layer can evolve independently while staying compatible with the coordination layer.</p><a class="button button-primary" href="https://github.com/Grishen-Corp/agent-pair">Read the source <span>↗</span></a></div><div class="reference-card"><div class="ref-head"><span class="ref-icon">◎</span><div><strong>AgentPlat</strong><small>Provider-neutral agent infrastructure</small></div></div><p>Agent Pair composes:</p><ul><li>Agent Rooms for governed task execution</li><li>Runtime adapters for portable agents</li><li>Interop for remote-agent communication</li><li>Artifacts, provenance, and approvals</li></ul><a href="https://github.com/Agentplat/agentplat">Explore AgentPlat <span>↗</span></a></div></section>
+
+    <section class="resources wrap"><p class="eyebrow">For humans &amp; agents</p><h2>Start with the source of truth.</h2><div class="resource-grid"><a href="https://github.com/Grishen-Corp/agent-pair"><span>⌘</span><strong>Agent Pair repository</strong><small>Product code, tests, and implementation</small>↗</a><a href="https://github.com/Agentplat/agentplat"><span>◎</span><strong>AgentPlat repository</strong><small>Coordination plane and public packages</small>↗</a><a href="https://github.com/Grishen-Corp/agent-pair/blob/main/AGENTPLAT.md"><span>◌</span><strong>Compatibility declaration</strong><small>Capabilities, boundaries, and evidence</small>↗</a><a href="https://github.com/Grishen-Corp/agent-pair/tree/main/docs"><span>◈</span><strong>Architecture &amp; papers</strong><small>Product decisions, spikes, and research notes</small>↗</a></div></section>
+
+    <section class="cta wrap"><div><p class="eyebrow">The next commit is a team sport</p><h2>Bring your agents<br /><em>into the same room.</em></h2></div><a class="button button-light" href="https://github.com/Grishen-Corp/agent-pair">Build with Agent Pair <span>↗</span></a></section>
+  </main>
+  <footer class="footer wrap"><a class="brand footer-brand" href="#top"><img src="./assets/logo_agent_pair.png" alt="Agent Pair" /></a><span>Open-source collaboration for coding agents.</span><div><a href="https://github.com/Grishen-Corp/agent-pair">GitHub</a><a href="https://github.com/Agentplat/agentplat">AgentPlat</a><a href="mailto:hello@agent-pair.com">Contact</a></div></footer>
+  <script>document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}}));</script>
+</body>
+</html>
