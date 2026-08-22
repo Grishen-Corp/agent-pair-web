@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Contact the Agent Pair team about the hosted service, open-source project, partnerships, or legal questions." />
+  <meta property="og:title" content="Contact — Agent Pair" />
+  <meta property="og:description" content="Send a message to the Agent Pair team." />
+  <title>Contact — Agent Pair</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="contact-page">
+  <div class="noise"></div>
+  <header class="site-header">
+    <a class="brand" href="./index.html" aria-label="Agent Pair home"><img src="./assets/logo_agent_pair.png" alt="Agent Pair" /></a>
+    <nav aria-label="Main navigation"><a href="./index.html#why">Why Agent Pair</a><a href="./case-study.html">Team use case</a><a href="./index.html#open-source">Open source</a><a class="active-link" href="./contact.html">Contact</a></nav>
+    <a class="button button-small button-dark" href="https://github.com/Grishen-Corp/agent-pair">View on GitHub <span>↗</span></a>
+  </header>
+
+  <main class="contact-main wrap">
+    <section class="contact-intro">
+      <p class="eyebrow"><i></i> Contact Agent Pair</p>
+      <h1>Let’s start a<br /><em>conversation.</em></h1>
+      <p class="lede">Questions about the hosted service, the open-source project, partnerships, or our legal notice? Send us a message and we’ll get back to you.</p>
+      <div class="contact-note"><span>↗</span><div><strong>Open-source support</strong><p>For reproducible bugs and feature proposals, a GitHub issue is usually the fastest path.</p><a href="https://github.com/Grishen-Corp/agent-pair/issues">Open an issue on GitHub</a></div></div>
+    </section>
+
+    <section class="contact-panel" aria-labelledby="contact-form-title">
+      <p class="eyebrow">Send a message</p>
+      <h2 id="contact-form-title">How can we help?</h2>
+      <form id="contact-form">
+        <div class="form-row">
+          <label>Name<input name="name" type="text" autocomplete="name" minlength="2" maxlength="100" required /></label>
+          <label>Email<input name="email" type="email" autocomplete="email" maxlength="254" required /></label>
+        </div>
+        <label>Topic<select name="topic"><option>General enquiry</option><option>Hosted service</option><option>Open-source project</option><option>Partnership</option><option>Legal question</option></select></label>
+        <label>Message<textarea name="message" rows="7" minlength="10" maxlength="5000" required></textarea></label>
+        <label class="contact-honeypot" aria-hidden="true">Website<input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
+        <p class="form-privacy">We’ll only use the information you provide to respond to your enquiry.</p>
+        <button class="button button-primary" type="submit">Send message</button>
+        <p id="contact-status" class="contact-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer wrap"><a class="brand footer-brand" href="./index.html"><img src="./assets/logo_agent_pair.png" alt="Agent Pair" /></a><span>Open-source collaboration for coding agents.</span><div><a href="https://github.com/Grishen-Corp/agent-pair">GitHub</a><a href="https://github.com/Agentplat/agentplat">AgentPlat</a><a class="active-link" href="./contact.html">Contact</a><a href="./legal.html">Legal</a></div></footer>
+  <script src="./contact-config.js"></script>
+  <script src="./contact.js"></script>
+</body>
+</html>

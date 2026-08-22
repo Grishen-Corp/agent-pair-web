@@ -1,0 +1,123 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Serverless contact form for the Agent Pair public website
+
+Parameters:
+  CodeS3Key:
+    Type: String
+    Description: S3 key containing the Lambda deployment package
+
+Resources:
+  ContactRateLimitTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: agent-pair-contact-rate-limit
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: ipHash
+          AttributeType: S
+      KeySchema:
+        - AttributeName: ipHash
+          KeyType: HASH
+      TimeToLiveSpecification:
+        AttributeName: expiresAt
+        Enabled: true
+      SSESpecification:
+        SSEEnabled: true
+
+  ContactFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: agent-pair-contact-function
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: agent-pair-contact-runtime
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: dynamodb:PutItem
+                Resource: !GetAtt ContactRateLimitTable.Arn
+              - Effect: Allow
+                Action: ses:SendEmail
+                Resource: !Sub arn:${AWS::Partition}:ses:${AWS::Region}:${AWS::AccountId}:identity/grishen.com
+
+  ContactFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: agent-pair-contact
+      Description: Sends Agent Pair website enquiries through Amazon SES
+      Runtime: nodejs22.x
+      Handler: contact.handler
+      Role: !GetAtt ContactFunctionRole.Arn
+      Timeout: 10
+      MemorySize: 128
+      ReservedConcurrentExecutions: 5
+      Environment:
+        Variables:
+          ALLOWED_ORIGINS: https://agent-pair.com,https://www.agent-pair.com
+          EMAIL_ADDRESS: info@grishen.com
+          RATE_LIMIT_TABLE: !Ref ContactRateLimitTable
+      Code:
+        S3Bucket: agent-pair-web-184644493945-us-east-1
+        S3Key: !Ref CodeS3Key
+
+  ContactApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: agent-pair-contact
+      ProtocolType: HTTP
+      CorsConfiguration:
+        AllowOrigins:
+          - https://agent-pair.com
+          - https://www.agent-pair.com
+        AllowMethods:
+          - POST
+        AllowHeaders:
+          - content-type
+        MaxAge: 86400
+
+  ContactIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref ContactApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt ContactFunction.Arn
+      PayloadFormatVersion: "2.0"
+
+  ContactRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref ContactApi
+      RouteKey: POST /contact
+      Target: !Sub integrations/${ContactIntegration}
+
+  ContactStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref ContactApi
+      StageName: $default
+      AutoDeploy: true
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 5
+        ThrottlingRateLimit: 2
+
+  ContactInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref ContactFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${ContactApi}/*/POST/contact
+
+Outputs:
+  ContactEndpoint:
+    Description: Public endpoint used by the website contact form
+    Value: !Sub https://${ContactApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/contact

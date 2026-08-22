@@ -1,0 +1,1 @@
+window.AGENT_PAIR_CONTACT_ENDPOINT = "";

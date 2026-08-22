@@ -27,6 +27,27 @@ jobs:
           role-to-assume: arn:aws:iam::184644493945:role/agent-pair-web-github-deploy
           aws-region: us-east-1
 
+      - name: Package contact service
+        run: |
+          zip -j contact-handler.zip lambda/contact.mjs
+          CONTACT_CODE_KEY="infrastructure/contact-handler-${GITHUB_SHA}.zip"
+          aws s3 cp contact-handler.zip "s3://agent-pair-web-184644493945-us-east-1/${CONTACT_CODE_KEY}"
+          echo "CONTACT_CODE_KEY=${CONTACT_CODE_KEY}" >> "$GITHUB_ENV"
+
+      - name: Deploy contact service
+        run: |
+          aws cloudformation deploy \
+            --stack-name agent-pair-contact \
+            --template-file infra/contact.yaml \
+            --capabilities CAPABILITY_NAMED_IAM \
+            --parameter-overrides CodeS3Key="$CONTACT_CODE_KEY" \
+            --no-fail-on-empty-changeset
+          CONTACT_ENDPOINT=$(aws cloudformation describe-stacks \
+            --stack-name agent-pair-contact \
+            --query "Stacks[0].Outputs[?OutputKey=='ContactEndpoint'].OutputValue" \
+            --output text)
+          echo "window.AGENT_PAIR_CONTACT_ENDPOINT = \"${CONTACT_ENDPOINT}\";" > contact-config.js
+
       - name: Publish static files
         run: |
           aws s3 sync . s3://agent-pair-web-184644493945-us-east-1/ \
@@ -36,11 +57,19 @@ jobs:
             --exclude ".DS_Store" \
             --exclude ".gitignore" \
             --exclude "README.md" \
+            --exclude "infra/*" \
+            --exclude "infrastructure/*" \
+            --exclude "lambda/*" \
+            --exclude "contact-handler.zip" \
+            --exclude "*.html" \
             --cache-control "public,max-age=300"
 
       - name: Keep HTML fresh
         run: |
-          aws s3 cp index.html s3://agent-pair-web-184644493945-us-east-1/index.html \
+          aws s3 cp . s3://agent-pair-web-184644493945-us-east-1/ \
+            --recursive \
+            --exclude "*" \
+            --include "*.html" \
             --cache-control "no-cache,no-store,must-revalidate" \
             --content-type "text/html; charset=utf-8"
 
