@@ -13,4 +13,4 @@ GitHub Actions authenticates to AWS with OIDC using the `agent-pair-web-github-d
 
 The deployment also provisions the contact endpoint with CloudFormation. The browser posts to API Gateway, which invokes a rate-limited Lambda and sends the message through Amazon SES from and to the verified Grishen address. The generated endpoint is written to `contact-config.js` during deployment; no AWS credentials are exposed to the browser.
 
-`infra/github-deploy-policy.json` contains the least-scope additions required by the existing GitHub deployment role to maintain the contact stack.
+`infra/github-deploy-policy.json` contains the least-scope additions required by the existing GitHub deployment role to maintain the contact stack. `infra/github-oidc-trust-policy.json` pins that role to this repository's immutable GitHub IDs and the `main` branch.

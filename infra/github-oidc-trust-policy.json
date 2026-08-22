@@ -1,0 +1,18 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::184644493945:oidc-provider/token.actions.githubusercontent.com"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+          "token.actions.githubusercontent.com:sub": "repo:Grishen-Corp@250347955/agent-pair-web@1342146827:ref:refs/heads/main"
+        }
+      }
+    }
+  ]
+}
